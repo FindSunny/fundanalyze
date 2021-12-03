@@ -1,0 +1,16 @@
+{
+  "name": "fundanalyze",
+  "version": "1.0.0",
+  "description": "用于基金排名及持仓数据的统计，产出Excel文档",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sjf",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "xlsx": "^0.17.4"
+  }
+}
