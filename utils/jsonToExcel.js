@@ -32,15 +32,22 @@ module.exports = {
             // format数据
             let fund_data = [];
             fund_data.push(['代码', '股票', '占比(%)', '持有股数(万股)', '持有金额(万元)']);
-            for (let stock of fundInfo) {
-                fund_data.push(stock);
-                stockAll.push({
-                    code: stock[0],
-                    name: stock[1],
-                    stockNum: parseFloat(stock[3].replaceAll(',', '')),
-                    stockAmount: parseFloat(stock[4].replaceAll(',', '')),
-                    count: 0
-                });
+            if (fundInfo) {
+                for (let stock of fundInfo) {
+                    fund_data.push(stock);
+                    // 排除QDII 国外投资基金
+                    if (rankList[i].fundType != 'QDII') {
+                        stockAll.push({
+                            code: stock[0],
+                            name: stock[1],
+                            stockNum: parseFloat(stock[3].replaceAll(',', '')),
+                            stockAmount: parseFloat(stock[4].replaceAll(',', '')),
+                            count: 0
+                        });
+                    }
+                }
+            } else {
+                fund_data.push(['(无持仓)'])
             }
             //创建排名工作簿
             let ws_f = XLSX.utils.aoa_to_sheet(fund_data);
@@ -77,10 +84,10 @@ module.exports = {
         //创建排名工作簿
         let ws_s = XLSX.utils.aoa_to_sheet(collection_array_data);
         // 存储排名工作簿
-        XLSX.utils.book_append_sheet(wb, ws_s, `基金排名前${size}个股频率统计`);
+        XLSX.utils.book_append_sheet(wb, ws_s, `基金收益率排名前${size}个股持仓统计(不含QDII)`);
 
         // 写入文件
-        XLSX.writeFile(wb, `./output/近一年基金排名前${size}持仓及个股频率_` + new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + '.xlsx');
+        XLSX.writeFile(wb, `./output/2022年基金收益率排名前${size}持仓汇总及个股持仓_` + new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + 'byQ.xlsx');
 
         console.log('数据统计完毕！');
     },
